@@ -1,46 +1,68 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/styles';
-import styles from './styles';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { Box, Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/styles';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { compose, bindActionCreators } from 'redux';
+import styles from './styles';
+import * as modalAction from '../../actions/modal';
 
 class TaskForm extends Component {
   render() {
-    const { open, classes, onClose } = this.props;
+    const { classes, modalActionCreators } = this.props;
+    const { hideModal } = modalActionCreators;
     return (
-      <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Thêm mới công việc</DialogTitle>
-        <DialogContent>
-          <TextField
-            id="standard-required"
-            label="Name"
-            className={classes.textField}
-            margin="normal"
-          />
-          <TextField
-            id="standard-multiline-flexible"
-            label="Multiline"
-            multiline
-            rowsMax="4"
-            className={classes.textField}
-            margin="normal"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={onClose} color="primary">
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <form>
+        <Grid container>
+          <Grid item md={12}>
+            <TextField
+              id="standard-name"
+              label="Tiêu đề"
+              className={classes.textField}
+              margin="normal"
+            />
+          </Grid>
+          <Grid item md={12}>
+            <TextField
+              id="standard-multiline-flexible"
+              label="Mô tả"
+              multiline
+              rowsMax="4"
+              className={classes.textField}
+              margin="normal"
+            />
+          </Grid>
+          <Grid item md={12}>
+            <Box display="flex" flexDirection="row-reverse" mt={2}>
+              <Box ml={1}>
+                <Button variant="contained" onClick={hideModal}>
+                  Hủy bỏ
+                </Button>
+              </Box>
+              <Button variant="contained" color="primary">
+                Lưu lại
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+      </form>
     );
   }
 }
 
-export default withStyles(styles)(TaskForm);
+TaskForm.propTypes = {
+  modalActionCreators: PropTypes.shape({
+    hideModal: PropTypes.func,
+  }),
+  classes: PropTypes.object,
+};
+
+const mapDispatchToProps = dispatch => ({
+  modalActionCreators: bindActionCreators(modalAction, dispatch),
+});
+
+const withConnect = connect(null, mapDispatchToProps);
+
+export default compose(withStyles(styles), withConnect)(TaskForm);

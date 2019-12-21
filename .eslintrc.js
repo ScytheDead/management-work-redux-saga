@@ -34,6 +34,7 @@ module.exports = {
     'no-param-reassign': 0,
     'import/no-useless-path-segments': 0,
     'import/prefer-default-export': 0,
+    'no-underscore-dangle': 0,
   },
   plugins: ['prettier'],
   env: {

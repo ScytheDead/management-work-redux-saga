@@ -4,71 +4,65 @@ import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import TaskForm from '../../components/TaskForm';
 import { STATUSES } from '../../constants';
 import TaskList from '../../components/TaskList/index';
 import styles from './styles';
-
-const listTask = [
-  {
-    id: 1,
-    title: 'Read book',
-    description: 'Read material ui book',
-    status: 0,
-  },
-  {
-    id: 2,
-    title: 'Play footbal',
-    description: 'With my friend',
-    status: 2,
-  },
-  {
-    id: 3,
-    title: 'Play game',
-    description: '',
-    status: 1,
-  },
-];
+import * as taskActions from '../../actions/task';
+import * as modalActions from '../../actions/modal';
+import SearchBox from '../../components/SearchBox';
 
 class TaskBoard extends Component {
-  state = {
-    open: false,
-  };
-
-  handleClose = () => {
-    this.setState({
-      open: false,
-    });
-  };
+  componentDidMount() {
+    const { taskActionCreators } = this.props;
+    const { fetchListTask } = taskActionCreators;
+    fetchListTask();
+  }
 
   openForm = () => {
-    this.setState({
-      open: true,
-    });
+    const { modalActionsCreators } = this.props;
+    const {
+      showModal,
+      changeTitleModal,
+      changeContentModal,
+    } = modalActionsCreators;
+    showModal();
+    changeTitleModal('Thêm mới công việc');
+    changeContentModal(<TaskForm />);
   };
 
-  renderBoard() {
+  handleChange = event => {
+    const { value } = event.target;
+    const { taskActionCreators } = this.props;
+    const { filterListTask } = taskActionCreators;
+    filterListTask(value);
+  };
+
+  searchBox() {
     let xhtml = null;
-    xhtml = (
-      <Grid container spacing={2}>
-        {STATUSES.map(status => {
-          const taskFilter = listTask.filter(
-            task => task.status === status.value,
-          );
-          return (
-            <TaskList tasks={taskFilter} status={status} key={status.value} />
-          );
-        })}
-      </Grid>
-    );
+    xhtml = <SearchBox handleChange={this.handleChange} />;
     return xhtml;
   }
 
-  renderForm() {
-    const { open } = this.state;
+  renderBoard() {
     let xhtml = null;
-
-    xhtml = <TaskForm open={open} onClose={this.handleClose} />;
+    const { listTask } = this.props;
+    if (listTask && listTask.length > 0) {
+      xhtml = (
+        <Grid container spacing={2}>
+          {STATUSES.map(status => {
+            const taskFilter = listTask.filter(
+              task => task.status === status.value,
+            );
+            return (
+              <TaskList tasks={taskFilter} status={status} key={status.value} />
+            );
+          })}
+        </Grid>
+      );
+    }
     return xhtml;
   }
 
@@ -84,9 +78,8 @@ class TaskBoard extends Component {
         >
           <AddIcon /> Thêm mới công việc
         </Button>
-
+        {this.searchBox()}
         {this.renderBoard()}
-        {this.renderForm()}
       </div>
     );
   }
@@ -94,6 +87,31 @@ class TaskBoard extends Component {
 
 TaskBoard.propTypes = {
   classes: PropTypes.object,
+  taskActionCreators: PropTypes.shape({
+    fetchListTask: PropTypes.func,
+    filterListTask: PropTypes.func,
+  }),
+  listTask: PropTypes.array,
+  modalActionsCreators: PropTypes.shape({
+    showModal: PropTypes.func,
+    hideModal: PropTypes.func,
+    changeTitleModal: PropTypes.func,
+    changeContentModal: PropTypes.func,
+  }),
 };
 
-export default withStyles(styles)(TaskBoard);
+const mapStateToProps = store => {
+  return {
+    listTask: store.task.listTasks,
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    taskActionCreators: bindActionCreators(taskActions, dispatch),
+    modalActionsCreators: bindActionCreators(modalActions, dispatch),
+  };
+};
+
+export default withStyles(styles)(
+  connect(mapStateToProps, mapDispatchToProps)(TaskBoard),
+);
