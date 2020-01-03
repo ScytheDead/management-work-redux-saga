@@ -1,54 +1,74 @@
 import {
-  fork,
-  take,
   call,
-  put,
   delay,
+  fork,
+  put,
+  take,
+  takeEvery,
   takeLatest,
-  select,
 } from 'redux-saga/effects';
-import * as taskTypes from '../constants/task';
-import { getList } from '../apis/task';
-import { STATUSES_CODE } from '../constants';
+import { hideModal, showModal } from '../actions/modal';
 import {
-  fetchListTaskSuccess,
+  addTaskFailed,
+  addTaskSuccess,
+  fetchListTask,
   fetchListTaskFailed,
-  filterListTaskSuccess,
+  fetchListTaskSuccess,
 } from '../actions/task';
-import { showLoading, hideLoading } from '../actions/ui';
+import { hideLoading, showLoading } from '../actions/ui';
+import { addTask, getList } from '../apis/task';
+import { STATUSES, STATUSES_CODE } from '../constants';
+import * as taskTypes from '../constants/task';
 
 function* watchFetchListTaskAction() {
-  yield take(taskTypes.FETCH_TASK);
-  yield put(showLoading());
-  const response = yield call(getList);
-  const { status, data } = response;
-  if (status === STATUSES_CODE.SUCCESS) {
-    // dispatch action fetchListTaskSuccess
-    yield put(fetchListTaskSuccess(data));
-  } else {
-    // dispatch action fetchListTaskFailed
-    yield put(fetchListTaskFailed(data));
+  while (true) {
+    const action = yield take(taskTypes.FETCH_TASK);
+    yield put(showLoading());
+    const { params } = action.payload;
+    const response = yield call(getList, params);
+    const { status, data } = response;
+    if (status === STATUSES_CODE.SUCCESS) {
+      // dispatch action fetchListTaskSuccess
+      yield put(fetchListTaskSuccess(data));
+    } else {
+      // dispatch action fetchListTaskFailed
+      yield put(fetchListTaskFailed(data));
+    }
+    yield delay(500);
+    yield put(hideLoading());
   }
-  yield delay(1000);
-  yield put(hideLoading());
 }
 
 function* filterTaskSaga({ payload }) {
   yield delay(500);
   const { keyword } = payload;
-  const listTasks = yield select(store => store.task.listTasks);
-  const listTaskFiltered = listTasks.filter(task =>
-    task.title
-      .trim()
-      .toLowerCase()
-      .includes(keyword.trim().toLowerCase()),
-  );
-  yield put(filterListTaskSuccess(listTaskFiltered));
+  yield put(fetchListTask({ q: keyword }));
+}
+
+function* addTaskSaga({ payload }) {
+  const { title, description } = payload;
+  yield put(showLoading());
+  yield put(hideModal());
+  const response = yield call(addTask, {
+    title,
+    description,
+    status: STATUSES[0].value,
+  });
+
+  const { data, status } = response;
+  if (status === STATUSES_CODE.CREATED) {
+    yield put(addTaskSuccess(data));
+  } else {
+    yield put(addTaskFailed(data));
+    yield put(showModal());
+  }
+  yield put(hideLoading());
 }
 
 function* rootSaga() {
   yield fork(watchFetchListTaskAction);
   yield takeLatest(taskTypes.FILTER_TASK, filterTaskSaga);
+  yield takeEvery(taskTypes.ADD_TASK, addTaskSaga);
 }
 
 export default rootSaga;

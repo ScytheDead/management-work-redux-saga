@@ -35,6 +35,7 @@ module.exports = {
     'import/no-useless-path-segments': 0,
     'import/prefer-default-export': 0,
     'no-underscore-dangle': 0,
+    'react/jsx-props-no-spreading': 0,
   },
   plugins: ['prettier'],
   env: {

@@ -39,6 +39,23 @@ const reducer = (state = initialState, action) => {
         listTasks: data,
       };
     }
+    case taskConstants.ADD_TASK: {
+      return {
+        ...state,
+      };
+    }
+    case taskConstants.ADD_TASK_SUCCESS: {
+      const { data } = action.payload;
+      return {
+        ...state,
+        listTasks: [data].concat(state.listTasks), // function concat is connect 2 arrays
+      };
+    }
+    case taskConstants.ADD_TASK_FAILED: {
+      return {
+        ...state,
+      };
+    }
     default:
       return state;
   }
