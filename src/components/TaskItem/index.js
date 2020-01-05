@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/styles';
-import styles from './styles';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import CardContent from '@material-ui/core/CardContent';
@@ -8,11 +7,13 @@ import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import Icon from '@material-ui/core/Icon';
+import PropTypes from 'prop-types';
+import styles from './styles';
 
 class TaskItem extends Component {
   render() {
     const { classes, task, status } = this.props;
-    const { id, title } = task;
+    const { id, title, description } = task;
     return (
       <Card key={id} className={classes.card}>
         <CardContent>
@@ -23,7 +24,7 @@ class TaskItem extends Component {
             <Grid item md={4}>
               {status.label}
             </Grid>
-            <p>{task.description}</p>
+            <p>{description}</p>
           </Grid>
         </CardContent>
         <CardActions className={classes.cardActions}>
@@ -48,5 +49,15 @@ class TaskItem extends Component {
     );
   }
 }
+
+TaskItem.propTypes = {
+  classes: PropTypes.object,
+  task: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    description: PropTypes.string,
+  }),
+  status: PropTypes.object,
+};
 
 export default withStyles(styles)(TaskItem);
