@@ -8,9 +8,25 @@ import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import Icon from '@material-ui/core/Icon';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import styles from './styles';
+import TaskForm from '../../components/TaskForm';
+import * as modalActions from '../../actions/modal';
 
 class TaskItem extends Component {
+  openForm = () => {
+    const { modalActionsCreators } = this.props;
+    const {
+      showModal,
+      changeTitleModal,
+      changeContentModal,
+    } = modalActionsCreators;
+    showModal();
+    changeTitleModal('Chỉnh sửa công việc');
+    changeContentModal(<TaskForm />);
+  };
+
   render() {
     const { classes, task, status } = this.props;
     const { id, title, description } = task;
@@ -33,6 +49,7 @@ class TaskItem extends Component {
             aria-label="edit"
             className={classes.fab}
             size="small"
+            onClick={this.openForm}
           >
             <Icon fontSize="small">edit</Icon>
           </Fab>
@@ -58,6 +75,20 @@ TaskItem.propTypes = {
     description: PropTypes.string,
   }),
   status: PropTypes.object,
+  modalActionsCreators: PropTypes.shape({
+    showModal: PropTypes.func,
+    hideModal: PropTypes.func,
+    changeTitleModal: PropTypes.func,
+    changeContentModal: PropTypes.func,
+  }),
 };
 
-export default withStyles(styles)(TaskItem);
+const mapStoreToProps = null;
+
+const mapDispatchToProps = dispatch => ({
+  modalActionsCreators: bindActionCreators(modalActions, dispatch),
+});
+
+export default withStyles(styles)(
+  connect(mapStoreToProps, mapDispatchToProps)(TaskItem),
+);
