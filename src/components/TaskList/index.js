@@ -8,7 +8,7 @@ import TaskItem from '../TaskItem';
 
 class TaskList extends Component {
   render() {
-    const { tasks, status } = this.props;
+    const { tasks, status, editTask } = this.props;
     return (
       <Grid item md={4} xs={12} key={status.value}>
         <Box mt={2} mb={2}>
@@ -16,7 +16,14 @@ class TaskList extends Component {
         </Box>
         <div>
           {tasks.map(task => {
-            return <TaskItem task={task} status={status} key={task.id} />;
+            return (
+              <TaskItem
+                task={task}
+                status={status}
+                key={task.id}
+                editTask={editTask}
+              />
+            );
           })}
         </div>
       </Grid>
@@ -30,6 +37,7 @@ TaskList.propTypes = {
     value: PropTypes.number,
     label: PropTypes.string,
   }),
+  editTask: PropTypes.func,
 };
 
 export default withStyles(styles)(TaskList);

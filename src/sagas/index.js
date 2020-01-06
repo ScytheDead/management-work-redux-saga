@@ -16,7 +16,7 @@ import {
   fetchListTaskSuccess,
 } from '../actions/task';
 import { hideLoading, showLoading } from '../actions/ui';
-import { addTask, getList } from '../apis/task';
+import { addTask, getList, updateTask } from '../apis/task';
 import { STATUSES, STATUSES_CODE } from '../constants';
 import * as taskTypes from '../constants/task';
 
@@ -65,10 +65,22 @@ function* addTaskSaga({ payload }) {
   yield put(hideLoading());
 }
 
+function* updateTaskSaga({ payload }) {
+  const { title, description, status } = payload.data;
+  yield put(showLoading());
+  yield put(hideModal());
+  const response = yield call(updateTask, {
+    title,
+    description,
+    status,
+  });
+}
+
 function* rootSaga() {
   yield fork(watchFetchListTaskAction);
   yield takeLatest(taskTypes.FILTER_TASK, filterTaskSaga);
   yield takeEvery(taskTypes.ADD_TASK, addTaskSaga);
+  yield takeLatest(taskTypes.UPDATE_TASK, updateTaskSaga);
 }
 
 export default rootSaga;

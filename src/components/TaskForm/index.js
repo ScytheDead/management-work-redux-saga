@@ -1,4 +1,4 @@
-import { Box, Grid } from '@material-ui/core';
+import { Box, Grid, MenuItem } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
@@ -8,9 +8,11 @@ import { bindActionCreators, compose } from 'redux';
 import { Field, reduxForm } from 'redux-form';
 import * as modalAction from '../../actions/modal';
 import * as taskAction from '../../actions/task';
-import renderTextField from '../FormHelper';
+import renderTextField from '../FormHelper/TextField';
+import renderSelectField from '../FormHelper/Select';
 import styles from './styles';
 import validate from './validate';
+import { STATUSES } from '../../constants';
 
 class TaskForm extends Component {
   handleSubmitForm = data => {
@@ -20,6 +22,15 @@ class TaskForm extends Component {
     const { title, description } = data;
     addTask({ title, description });
   };
+
+  renderStatusField() {
+    let xhtml = null;
+    const { taskEditing, classes } = this.props;
+    if (taskEditing) {
+      xhtml = <Field component="input" type="text" />;
+    }
+    return xhtml;
+  }
 
   render() {
     const {
@@ -55,6 +66,10 @@ class TaskForm extends Component {
               name="description"
             />
           </Grid>
+          <select component="input" name="test" type="select">
+            <option>aaaa</option>
+          </select>
+
           <Grid item md={12}>
             <Box display="flex" flexDirection="row-reverse" mt={2}>
               <Box ml={1}>
@@ -89,14 +104,26 @@ TaskForm.propTypes = {
   handleSubmit: PropTypes.func,
   invalid: PropTypes.bool,
   submitting: PropTypes.bool,
+  taskEditing: PropTypes.object,
 };
+
+const mapStoreToProps = store => ({
+  taskEditing: store.task.taskAction,
+  initialValues: {
+    title: store.task.taskEditing ? store.task.taskEditing.title : '',
+    description: store.task.taskEditing
+      ? store.task.taskEditing.description
+      : '',
+    status: store.task.taskEditing ? store.task.taskEditing.status : '',
+  },
+});
 
 const mapDispatchToProps = dispatch => ({
   modalActionCreators: bindActionCreators(modalAction, dispatch),
   taskActionCreators: bindActionCreators(taskAction, dispatch),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const withConnect = connect(mapStoreToProps, mapDispatchToProps);
 
 const withForm = reduxForm({
   form: 'TASK_MANAGEMENT',
