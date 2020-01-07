@@ -48,6 +48,12 @@ class TaskBoard extends Component {
     filterListTask(value);
   };
 
+  handleDelete = task => {
+    const { taskActionCreators } = this.props;
+    const { deleteTask } = taskActionCreators;
+    deleteTask({ id: task.id });
+  };
+
   searchBox() {
     let xhtml = null;
     xhtml = <SearchBox handleChange={this.handleChange} />;
@@ -70,6 +76,7 @@ class TaskBoard extends Component {
                 status={status}
                 key={status.value}
                 editTask={this.openForm}
+                deleteTask={this.handleDelete}
               />
             );
           })}
@@ -104,6 +111,7 @@ TaskBoard.propTypes = {
     fetchListTask: PropTypes.func,
     filterListTask: PropTypes.func,
     setTaskEditing: PropTypes.func,
+    deleteTask: PropTypes.func,
   }),
   listTask: PropTypes.array,
   modalActionsCreators: PropTypes.shape({
