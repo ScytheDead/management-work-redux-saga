@@ -3,6 +3,7 @@ import { toastError } from '../helpers/toastHelper';
 
 const initialState = {
   listTasks: [],
+  taskEditing: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -52,6 +53,36 @@ const reducer = (state = initialState, action) => {
       };
     }
     case taskConstants.ADD_TASK_FAILED: {
+      return {
+        ...state,
+      };
+    }
+    case taskConstants.SET_TASK_EDITING: {
+      const { task } = action.payload;
+      return {
+        ...state,
+        taskEditing: task,
+      };
+    }
+    case taskConstants.UPDATE_TASK: {
+      return {
+        ...state,
+      };
+    }
+    case taskConstants.UPDATE_TASK_SUCCESS: {
+      const { data } = action.payload;
+      const { listTasks, taskEditing } = state;
+      const listTasksUpdated = [...listTasks];
+      const indexTaskUpdate = listTasksUpdated.findIndex(
+        task => task.id === taskEditing.id,
+      );
+      listTasksUpdated[indexTaskUpdate] = data;
+      return {
+        ...state,
+        listTasks: listTasksUpdated,
+      };
+    }
+    case taskConstants.UPDATE_TASK_FAILED: {
       return {
         ...state,
       };
