@@ -72,12 +72,14 @@ const reducer = (state = initialState, action) => {
     case taskConstants.UPDATE_TASK_SUCCESS: {
       const { data } = action.payload;
       const { listTasks, taskEditing } = state;
-      const indexTaskUpdate = listTasks.findIndex(
+      const listTasksUpdated = [...listTasks];
+      const indexTaskUpdate = listTasksUpdated.findIndex(
         task => task.id === taskEditing.id,
       );
-      listTasks[indexTaskUpdate] = data;
+      listTasksUpdated[indexTaskUpdate] = data;
       return {
         ...state,
+        listTasks: listTasksUpdated,
       };
     }
     case taskConstants.UPDATE_TASK_FAILED: {

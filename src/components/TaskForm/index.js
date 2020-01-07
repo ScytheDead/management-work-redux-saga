@@ -8,26 +8,40 @@ import { bindActionCreators, compose } from 'redux';
 import { Field, reduxForm } from 'redux-form';
 import * as modalAction from '../../actions/modal';
 import * as taskAction from '../../actions/task';
-import renderTextField from '../FormHelper/TextField';
 import renderSelectField from '../FormHelper/Select';
+import renderTextField from '../FormHelper/TextField';
 import styles from './styles';
 import validate from './validate';
-import { STATUSES } from '../../constants';
 
 class TaskForm extends Component {
   handleSubmitForm = data => {
     console.log('data: ', data);
-    const { taskActionCreators } = this.props;
-    const { addTask } = taskActionCreators;
-    const { title, description } = data;
-    addTask({ title, description });
+    const { taskActionCreators, taskEditing } = this.props;
+    const { addTask, updateTask } = taskActionCreators;
+    if (taskEditing && taskEditing.id) {
+      updateTask(data);
+    } else {
+      addTask(data);
+    }
   };
 
-  renderStatusField() {
-    let xhtml = null;
+  renderStatusSelection() {
     const { taskEditing, classes } = this.props;
-    if (taskEditing) {
-      xhtml = <Field component="input" type="text" />;
+    let xhtml = null;
+    if (taskEditing && taskEditing.id) {
+      xhtml = (
+        <Field
+          id="status"
+          label="Tnạng thái"
+          className={classes.select}
+          component={renderSelectField}
+          name="status"
+        >
+          <MenuItem value={0}>Ready</MenuItem>
+          <MenuItem value={1}>In Progress</MenuItem>
+          <MenuItem value={2}>Completed</MenuItem>
+        </Field>
+      );
     }
     return xhtml;
   }
@@ -66,10 +80,7 @@ class TaskForm extends Component {
               name="description"
             />
           </Grid>
-          <select component="input" name="test" type="select">
-            <option>aaaa</option>
-          </select>
-
+          {this.renderStatusSelection()}
           <Grid item md={12}>
             <Box display="flex" flexDirection="row-reverse" mt={2}>
               <Box ml={1}>
@@ -99,6 +110,7 @@ TaskForm.propTypes = {
   }),
   taskActionCreators: PropTypes.shape({
     addTask: PropTypes.func,
+    updateTask: PropTypes.func,
   }),
   classes: PropTypes.object,
   handleSubmit: PropTypes.func,
@@ -108,7 +120,7 @@ TaskForm.propTypes = {
 };
 
 const mapStoreToProps = store => ({
-  taskEditing: store.task.taskAction,
+  taskEditing: store.task.taskEditing,
   initialValues: {
     title: store.task.taskEditing ? store.task.taskEditing.title : '',
     description: store.task.taskEditing

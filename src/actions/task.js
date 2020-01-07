@@ -80,7 +80,7 @@ export const setTaskEditing = task => {
 
 export const updateTask = ({ title, description, status }) => {
   return {
-    type: taskConstants.ADD_TASK,
+    type: taskConstants.UPDATE_TASK,
     payload: {
       title,
       description,
@@ -91,7 +91,7 @@ export const updateTask = ({ title, description, status }) => {
 
 export const updateTaskSuccess = data => {
   return {
-    type: taskConstants.ADD_TASK_SUCCESS,
+    type: taskConstants.UPDATE_TASK_SUCCESS,
     payload: {
       data,
     },
@@ -100,7 +100,7 @@ export const updateTaskSuccess = data => {
 
 export const updateTaskFailed = error => {
   return {
-    type: taskConstants.ADD_TASK_FAILED,
+    type: taskConstants.UPDATE_TASK_FAILED,
     payload: {
       error,
     },
