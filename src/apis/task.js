@@ -19,6 +19,5 @@ export const addTask = task => {
 
 export const updateTask = taskUpdate => {
   const { id } = taskUpdate;
-  console.log(taskUpdate);
   return axiosService.put(`${API_ENDPOINT}/${url}/${id}`, taskUpdate);
 };

@@ -15,7 +15,6 @@ import validate from './validate';
 
 class TaskForm extends Component {
   handleSubmitForm = data => {
-    console.log('data: ', data);
     const { taskActionCreators, taskEditing } = this.props;
     const { addTask, updateTask } = taskActionCreators;
     if (taskEditing && taskEditing.id) {
