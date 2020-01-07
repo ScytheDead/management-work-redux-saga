@@ -53,6 +53,8 @@ const reducer = (state = initialState, action) => {
       };
     }
     case taskConstants.ADD_TASK_FAILED: {
+      const { error } = action.payload;
+      toastError(error);
       return {
         ...state,
       };
@@ -83,6 +85,32 @@ const reducer = (state = initialState, action) => {
       };
     }
     case taskConstants.UPDATE_TASK_FAILED: {
+      const { error } = action.payload;
+      toastError(error);
+      return {
+        ...state,
+      };
+    }
+    case taskConstants.DELETE_TASK: {
+      return {
+        ...state,
+      };
+    }
+    case taskConstants.DELETE_TASK_SUCCESS: {
+      const { id } = action.payload;
+      const listTasksAfterDelete = [...state.listTasks];
+      const indexTaskDelete = listTasksAfterDelete.findIndex(
+        task => task.id === id,
+      );
+      listTasksAfterDelete.splice(indexTaskDelete, 1);
+      return {
+        ...state,
+        listTasks: listTasksAfterDelete,
+      };
+    }
+    case taskConstants.DELETE_TASK_FAILED: {
+      const { error } = action.payload;
+      toastError(error);
       return {
         ...state,
       };

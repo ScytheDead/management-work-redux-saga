@@ -12,7 +12,7 @@ import styles from './styles';
 
 class TaskItem extends Component {
   render() {
-    const { classes, task, status, editTask } = this.props;
+    const { classes, task, status, editTask, deleteTask } = this.props;
     const { id, title, description } = task;
     return (
       <Card key={id} className={classes.card}>
@@ -42,6 +42,7 @@ class TaskItem extends Component {
             aria-label="delete"
             className={classes.fab}
             size="small"
+            onClick={() => deleteTask(task)}
           >
             <Icon fontSize="small">delete</Icon>
           </Fab>
@@ -60,6 +61,7 @@ TaskItem.propTypes = {
   }),
   status: PropTypes.object,
   editTask: PropTypes.func,
+  deleteTask: PropTypes.func,
 };
 
 export default withStyles(styles)(TaskItem);
