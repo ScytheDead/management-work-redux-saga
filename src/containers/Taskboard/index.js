@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Box } from '@material-ui/core';
 import TaskForm from '../../components/TaskForm';
 import { STATUSES } from '../../constants';
 import TaskList from '../../components/TaskList/index';
@@ -41,6 +42,47 @@ class TaskBoard extends Component {
     changeContentModal(<TaskForm />);
   };
 
+  openConfirmDeleteForm = task => {
+    const { modalActionsCreators, taskActionCreators, classes } = this.props;
+    const {
+      showModal,
+      hideModal,
+      changeTitleModal,
+      changeContentModal,
+    } = modalActionsCreators;
+    const { deleteTask } = taskActionCreators;
+    showModal();
+    changeTitleModal('Xác nhận xóa công việc');
+    changeContentModal(
+      <div>
+        <div>
+          Bạn có chắc chắn muốn xóa{' '}
+          <span className={classes.textBold}>{task.title}</span> ?
+        </div>
+
+        <Box display="flex" flexDirection="row-reverse" mt={2}>
+          <Box ml={1}>
+            <Button variant="contained" onClick={hideModal}>
+              Hủy bỏ
+            </Button>
+          </Box>
+          <Box>
+            <Button
+              variant="contained"
+              onClick={() => {
+                deleteTask({ id: task.id });
+                hideModal();
+              }}
+              color="primary"
+            >
+              Đồng ý
+            </Button>
+          </Box>
+        </Box>
+      </div>,
+    );
+  };
+
   handleChange = event => {
     const { value } = event.target;
     const { taskActionCreators } = this.props;
@@ -49,9 +91,7 @@ class TaskBoard extends Component {
   };
 
   handleDelete = task => {
-    const { taskActionCreators } = this.props;
-    const { deleteTask } = taskActionCreators;
-    deleteTask({ id: task.id });
+    this.openConfirmDeleteForm(task);
   };
 
   searchBox() {
