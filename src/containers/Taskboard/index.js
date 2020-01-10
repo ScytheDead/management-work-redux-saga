@@ -69,10 +69,7 @@ class TaskBoard extends Component {
           <Box>
             <Button
               variant="contained"
-              onClick={() => {
-                deleteTask({ id: task.id });
-                hideModal();
-              }}
+              onClick={() => deleteTask({ id: task.id })}
               color="primary"
             >
               Đồng ý
