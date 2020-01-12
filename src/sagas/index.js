@@ -94,6 +94,7 @@ function* deleteTaskSaga({ payload }) {
   const { status } = response;
   if (status === STATUSES_CODE.SUCCESS) {
     yield put(deleteTaskSuccess(id));
+    yield put(hideModal());
   }
   yield put(hideLoading());
 }
