@@ -37,6 +37,7 @@ module.exports = {
     'no-underscore-dangle': 0,
     'react/jsx-props-no-spreading': 0,
     'react/jsx-indent': 0,
+    'import/no-cycle': 0,
     'prettier/prettier': [
       'error',
       {
