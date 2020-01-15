@@ -25,29 +25,37 @@ class Header extends Component {
     this.state = {
       anchorEl: null,
       mobileMoreAnchorEl: null,
-      isMenuOpen: false,
-      isMobileMenuOpen: false,
     };
   }
 
-  handleProfileMenuOpen = () => {
-    console.log('handleProfileMenuOpen');
+  handleProfileMenuOpen = event => {
+    this.setState({
+      anchorEl: event.currentTarget,
+    });
   };
 
-  handleMobileMenuOpen = () => {
-    console.log('handleMobileMenuOpen');
+  handleMobileMenuOpen = event => {
+    this.setState({
+      mobileMoreAnchorEl: event.currentTarget,
+    });
   };
 
   handleMenuClose = () => {
-    console.log('handleMenuClose');
+    this.setState({
+      anchorEl: null,
+    });
+    this.handleMobileMenuClose();
   };
 
   handleMobileMenuClose = () => {
-    console.log('handleMobileMenuClose');
+    this.setState({
+      mobileMoreAnchorEl: null,
+    });
   };
 
   renderMobileMenu = () => {
-    const { mobileMoreAnchorEl, isMobileMenuOpen } = this.state;
+    const { mobileMoreAnchorEl } = this.state;
+    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     return (
       <Menu
         anchorEl={mobileMoreAnchorEl}
@@ -74,7 +82,8 @@ class Header extends Component {
   };
 
   renderMenu = () => {
-    const { anchorEl, isMenuOpen } = this.state;
+    const { anchorEl } = this.state;
+    const isMenuOpen = Boolean(anchorEl);
     return (
       <Menu
         anchorEl={anchorEl}
