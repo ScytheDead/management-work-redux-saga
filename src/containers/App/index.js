@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter, Switch } from 'react-router-dom';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../../commons/theme';
 import GlobalLoading from '../../components/GlobalLoading';
 import CommonModal from '../../components/Modal/index.js';
@@ -37,6 +38,7 @@ class App extends Component {
       <Provider store={store}>
         <BrowserRouter>
           <ThemeProvider theme={theme}>
+            <CssBaseline />
             <Switch>{this.renderAdminRoutes()}</Switch>
             <CommonModal />
             <ToastContainer />
