@@ -66,17 +66,7 @@ class Header extends Component {
         open={isMobileMenuOpen}
         onClose={this.handleMobileMenuClose}
       >
-        <MenuItem onClick={this.handleProfileMenuOpen}>
-          <IconButton
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
+        <MenuItem onClick={this.handleProfileMenuOpen}>Logout</MenuItem>
       </Menu>
     );
   };
@@ -94,14 +84,13 @@ class Header extends Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={this.handleMenuClose}>Logout</MenuItem>
       </Menu>
     );
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, name } = this.props;
     return (
       <div className={classes.grow}>
         <AppBar position="static">
@@ -115,7 +104,7 @@ class Header extends Component {
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" noWrap>
-              Material-UI
+              {name}
             </Typography>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
@@ -165,6 +154,7 @@ class Header extends Component {
 
 Header.propTypes = {
   classes: PropTypes.object,
+  name: PropTypes.string,
 };
 
 export default withStyles(styles)(Header);
