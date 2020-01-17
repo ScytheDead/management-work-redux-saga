@@ -38,6 +38,7 @@ module.exports = {
     'react/jsx-props-no-spreading': 0,
     'react/jsx-indent': 0,
     'import/no-cycle': 0,
+    'react/no-unused-prop-types': 0,
     'prettier/prettier': [
       'error',
       {
