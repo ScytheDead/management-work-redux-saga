@@ -21,14 +21,14 @@ class GlobalLoading extends Component {
   }
 }
 
-GlobalLoading.propType = {
+GlobalLoading.propTypes = {
   classes: PropTypes.object,
   showLoading: PropTypes.bool,
 };
 
 const mapStoreToProps = store => {
   return {
-    showLoading: store.ui,
+    showLoading: store.ui.showLoading,
   };
 };
 

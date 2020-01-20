@@ -1,13 +1,13 @@
-import { withStyles, Drawer, ListItem, List } from '@material-ui/core';
-import React, { useState } from 'react';
+import { Drawer, List, ListItem, withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import styles from './styles';
 import { ADMIN_ROUTES } from '../../../constants';
+import styles from './styles';
 
 function Sidebar(props) {
-  const [isOpen, setIsOpen] = useState(true);
-  const { classes } = props;
+  const { classes, isOpenSidebar } = props;
+
   function renderListMenu() {
     return (
       <div className={classes.list}>
@@ -34,8 +34,7 @@ function Sidebar(props) {
       classes={{
         paper: classes.drawerPaper,
       }}
-      open={isOpen}
-      onClose={() => setIsOpen(false)}
+      open={isOpenSidebar}
       variant="persistent"
     >
       {renderListMenu()}
@@ -45,6 +44,8 @@ function Sidebar(props) {
 
 Sidebar.propTypes = {
   classes: PropTypes.object,
+  isOpenSidebar: PropTypes.bool,
+  hideSidebar: PropTypes.func,
 };
 
 export default withStyles(styles)(Sidebar);

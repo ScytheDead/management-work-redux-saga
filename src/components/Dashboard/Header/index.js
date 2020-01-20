@@ -90,7 +90,7 @@ class Header extends Component {
   };
 
   render() {
-    const { classes, name } = this.props;
+    const { classes, name, isOpenSidebar, handleToggleSidebar } = this.props;
     return (
       <div className={classes.grow}>
         <AppBar position="static">
@@ -100,6 +100,7 @@ class Header extends Component {
               className={classes.menuButton}
               color="inherit"
               aria-label="open drawer"
+              onClick={() => handleToggleSidebar(!isOpenSidebar)}
             >
               <MenuIcon />
             </IconButton>
@@ -155,6 +156,8 @@ class Header extends Component {
 Header.propTypes = {
   classes: PropTypes.object,
   name: PropTypes.string,
+  isOpenSidebar: PropTypes.bool,
+  handleToggleSidebar: PropTypes.func,
 };
 
 export default withStyles(styles)(Header);
