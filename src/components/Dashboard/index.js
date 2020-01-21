@@ -7,6 +7,7 @@ import styles from './styles';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import * as uiActions from '../../actions/ui';
+import cn from 'classnames';
 
 class Dashboard extends Component {
   handleToggleSidebar = value => {
@@ -30,7 +31,13 @@ class Dashboard extends Component {
         />
         <div className={classes.wrapper}>
           <Sidebar isOpenSidebar={isOpenSidebar} />
-          <div className={classes.wrapperContent}>{children}</div>
+          <div
+            className={cn(classes.wrapperContent, {
+              [classes.shiftLeft]: !isOpenSidebar,
+            })}
+          >
+            {children}
+          </div>
         </div>
       </div>
     );
