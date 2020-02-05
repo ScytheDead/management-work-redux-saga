@@ -1,3 +1,4 @@
+import { Box } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
@@ -6,14 +7,13 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Box } from '@material-ui/core';
-import TaskForm from '../../components/TaskForm';
-import { STATUSES } from '../../constants';
-import TaskList from '../../components/TaskList/index';
-import styles from './styles';
-import * as taskActions from '../../actions/task';
 import * as modalActions from '../../actions/modal';
+import * as taskActions from '../../actions/task';
 import SearchBox from '../../components/SearchBox';
+import TaskForm from '../../components/TaskForm';
+import TaskList from '../../components/TaskList/index';
+import { STATUSES } from '../../constants';
+import styles from './styles';
 
 class TaskBoard extends Component {
   componentDidMount() {
