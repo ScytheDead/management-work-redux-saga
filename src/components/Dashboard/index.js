@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
+import cn from 'classnames';
 import styles from './styles';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import * as uiActions from '../../actions/ui';
-import cn from 'classnames';
 
 class Dashboard extends Component {
   handleToggleSidebar = value => {

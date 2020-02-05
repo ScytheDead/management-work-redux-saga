@@ -14,6 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import SearchIcon from '@material-ui/icons/Search';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import styles from './styles';
 
 const menuId = 'primary-search-account-menu';
@@ -45,6 +46,11 @@ class Header extends Component {
       anchorEl: null,
     });
     this.handleMobileMenuClose();
+  };
+
+  handleLogout = () => {
+    const { history } = this.props;
+    history.push('/');
   };
 
   handleMobileMenuClose = () => {
@@ -84,7 +90,7 @@ class Header extends Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}>Logout</MenuItem>
+        <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
       </Menu>
     );
   };
@@ -158,6 +164,7 @@ Header.propTypes = {
   name: PropTypes.string,
   isOpenSidebar: PropTypes.bool,
   handleToggleSidebar: PropTypes.func,
+  history: PropTypes.object,
 };
 
-export default withStyles(styles)(Header);
+export default withStyles(styles)(withRouter(Header));

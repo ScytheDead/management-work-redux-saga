@@ -11,8 +11,9 @@ import GlobalLoading from '../../components/GlobalLoading';
 import CommonModal from '../../components/Modal/index.js';
 import configureStore from '../../redux/configureStore';
 import styles from './styles.js';
-import { ADMIN_ROUTES } from '../../constants';
+import { ADMIN_ROUTES, ROUTES } from '../../constants';
 import AdminLayoutRoute from '../../commons/Layout/AdminLayoutRoute';
+import DefaultLayoutRoute from '../../commons/Layout/DefaultLayoutRoute';
 
 const store = configureStore();
 
@@ -33,6 +34,20 @@ class App extends Component {
     return xhtml;
   }
 
+  renderDefaultRoutes() {
+    let xhtml = null;
+    xhtml = ROUTES.map(route => (
+      <DefaultLayoutRoute
+        key={route.path}
+        name={route.name}
+        path={route.path}
+        component={route.component}
+        exact={route.exact}
+      />
+    ));
+    return xhtml;
+  }
+
   render() {
     return (
       <Provider store={store}>
@@ -40,6 +55,7 @@ class App extends Component {
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <Switch>{this.renderAdminRoutes()}</Switch>
+            <Switch>{this.renderDefaultRoutes()}</Switch>
             <CommonModal />
             <ToastContainer />
             <GlobalLoading />
